@@ -22,6 +22,7 @@
 	var LayerOpacity = L.Control.extend({
             
             options : {
+                layers: [],
                 position: 'topleft'
             },
 
@@ -80,7 +81,7 @@
 
             addLayer : function(layer) {
                 console.info('Adding layer to LayerOpacity.Control');
-                this.layers.push(layer);
+                this.options.layers.push(layer);
             }
 	});
 	

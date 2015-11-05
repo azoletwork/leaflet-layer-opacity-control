@@ -23,7 +23,7 @@
 
         options : {
             debug: false,
-            layers: [],
+            layers: {},
             position: 'topleft'
         },
 
@@ -72,11 +72,9 @@
             });
 
             slider.on('change', function(e) {
-                if (that.options.layers) {
-                    for (var i = 0, l = that.options.layers.length; i < l; ++i) {
+                if (that.options.layers) 
+                    for (var i in that.options.layers) 
                         that.options.layers[i].setOpacity(e.newValue / 100);
-                    }
-                }
             });
 
             return container;

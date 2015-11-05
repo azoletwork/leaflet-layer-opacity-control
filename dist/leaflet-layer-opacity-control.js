@@ -86,10 +86,13 @@
 
             var that = this;
 
+            // do not add layer if already under control
+            if (that.options.layers[ layer._leaflet_id ]) return ;
+
             if (that.options.debug && console && console.log)
                 console.log('Adding new layer to LayerOpacity control', layer);
 
-            that.options.layers.push(layer);
+            that.options.layers[ layer._leaflet_id ] = layer;
 
         }
     });

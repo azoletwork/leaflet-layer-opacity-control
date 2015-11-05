@@ -19,72 +19,81 @@
     }
 }(function (L) {
 
-	var LayerOpacity = L.Control.extend({
-            
-            options : {
-                layers: [],
-                position: 'topleft'
-            },
+    var LayerOpacity = L.Control.extend({
 
-            initialize: function (options) {
+        options : {
+            debug: false,
+            layers: [],
+            position: 'topleft'
+        },
 
-                // constructor
-                L.Util.setOptions(this, options);
+        initialize: function (options) {
 
-            },
+            // constructor
+            L.Util.setOptions(this, options);
 
-            onAdd : function(map) {
-                console.info('Adding LayerOpacity.Control', this.options);
+        },
 
-                var that = this;
+        onAdd : function(map) {
 
-                // create the control container with a specific class name
-                var container = L.DomUtil.create('div', 'layer-opacity-control leaflet-bar');
+            var that = this;
 
-                // ... initialize other DOM elements, add listeners, etc.
-                var sliderElement = L.DomUtil.create('input', 'slider', container);
+            if (that.options.debug && console && console.log)
+                console.log('Adding LayerOpacity control', that.options);
 
-                var tooltipPosition = 'right';
+            // create the control container with a specific class name
+            var container = L.DomUtil.create('div', 'layer-opacity-control leaflet-bar');
 
-                if (that.options.position.indexOf('left') > -1) {
-                    tooltipPosition = 'right';
-                } else {
-                    tooltipPosition = 'left';
-                }
+            // ... initialize other DOM elements, add listeners, etc.
+            var sliderElement = L.DomUtil.create('input', 'slider', container);
 
-                var slider = new Slider(sliderElement, {
-                    min : 0,
-                    max : 100,
-                    tooltip_position : tooltipPosition,
-                    value : 100,
-                    orientation : 'vertical'
-                });
+            var tooltipPosition = 'right';
 
-                slider.on('slideStart', function(value) {
-                    map.dragging.disable();
-                });
-
-                slider.on('slideStop', function(value) {
-                    map.dragging.enable();
-                });
-
-                slider.on('change', function(e) {
-                    if (that.options.layers) {
-                        for (var i = 0, l = that.options.layers.length; i < l; ++i) {
-                            that.options.layers[i].setOpacity(e.newValue / 100);
-                        }
-                    }
-                });
-
-                return container;
-            },
-
-            addLayer : function(layer) {
-                console.info('Adding layer to LayerOpacity.Control');
-                this.options.layers.push(layer);
+            if (that.options.position.indexOf('left') > -1) {
+                tooltipPosition = 'right';
+            } else {
+                tooltipPosition = 'left';
             }
-	});
-	
-	return LayerOpacity;
+
+            var slider = new Slider(sliderElement, {
+                min : 0,
+                max : 100,
+                tooltip_position : tooltipPosition,
+                value : 100,
+                orientation : 'vertical'
+            });
+
+            slider.on('slideStart', function(value) {
+                map.dragging.disable();
+            });
+
+            slider.on('slideStop', function(value) {
+                map.dragging.enable();
+            });
+
+            slider.on('change', function(e) {
+                if (that.options.layers) {
+                    for (var i = 0, l = that.options.layers.length; i < l; ++i) {
+                        that.options.layers[i].setOpacity(e.newValue / 100);
+                    }
+                }
+            });
+
+            return container;
+        },
+
+        addLayer : function(layer) {
+
+            var that = this;
+
+            if (that.options.debug && console && console.log)
+                console.log('Adding new layer to LayerOpacity control', layer);
+
+            that.options.layers.push(layer);
+
+        }
+    });
+
+    return LayerOpacity;
 	
 }, window));
